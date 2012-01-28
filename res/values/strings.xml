@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+        <!-- Feedback -->
+    <string name="email_address">mc.reidie@gmail.com</string>
+
+     <string name="feedbacktype1">Praise</string>
+     <string name="feedbacktype2">Error</string>
+     <string name="feedbacktype3">Suggestion</string>
+     <string name="feedbacktype4">Bug</string>
+
+    <string-array name="feedbacktypelist">
+		<item>@string/feedbacktype1</item>
+		<item>@string/feedbacktype2</item>
+		<item>@string/feedbacktype3</item>
+		<item>@string/feedbacktype4</item>
+    </string-array>
+    <!-- END Feedback -->
+
+
+
+    <string name="app_name">FixtureFeed</string>
+    <string name="welcome_message">Thankyou for buying FixtureFeed Pro!\n\rFeatures of the pro version\n\r-Shows are sorted in time order\n\r-No adverts!\n\r-Choose words to ignore\n\r-See the shows you have added to your calenda\n\r-NEW! Find football on sky sports and espn</string>
+    <string name="request_url">http://xmltv.radiotimes.com/xmltv/</string>
+    <string name="request_extension">.dat</string>
+    <string name="save_file">fixturefeed_data.xml</string>
+    <integer name="max_threads">6</integer>
+    <integer name="days_to_keep_data">14</integer>
+    <integer name="refresh_interval_mins">3</integer>
+    <bool name="allow_alternate_source">false</bool>
+    <string-array name="listChannels">
+     <item>All</item>
+     <item>Sport</item>
+     <item>Animation</item>
+     <item>Children</item>
+     <item>Cookery</item>
+     <item>Drama</item>
+     <item>Documentary</item>
+     <item>Education</item>
+     <item>Food</item>
+     <item>Film</item>
+     <item>Music</item>
+     <item>News and Current Affairs</item>
+     <item>Sitcom</item>     
+     <item>Sci-fi</item>
+     <item>Soap</item>
+     <item>Talk show</item>
+    </string-array>
+    <array name="search_words">
+        <item>football</item>
+        <item>premier league</item>
+        <item>soccer</item>
+        <item>champions league</item>
+        <item>FA Cup</item>
+        <item>championship</item>
+        <item>League Cup</item>
+    </array>
+    <array name="search_exclude">
+        <item>poker</item>
+        <item>race</item>
+        <item>snooker</item>
+        <item>motorsport</item>
+        <item>volleyball</item>
+        <item>championships</item>
+        <item>american football</item>
+        <item>rider</item>
+        <item>triathlon</item>
+        <item>rugby</item>
+        <item>boxing</item>
+        <item>fight</item>
+        <item>mgm</item>
+        <item>cricket</item>
+        <item>paralympic</item>
+        <item>superbowl</item>
+        <item>six nations</item>
+        <item>the grid</item>
+        <item>Superbike</item>
+        <item>Prix</item>
+        <item>UFC</item>
+        <item>Touring Car</item>
+        <item>rally</item>
+        <item>golf</item>
+        <item>darts</item>
+        <item>quiz</item>
+        <item>wwe</item>
+        <item>powerboating</item>
+        <item>afl</item>
+        <item>msa</item>
+    </array>
+    <array name="channels">
+        <item>92-BBC 1-bbc_one</item>
+        <item>105-BBC 2-bbc_two</item>
+        <item>24-ITV-itv_1</item>
+        <item>132-Channel 4-four</item>
+        <item>134-Five-five</item>
+        <item>45-BBC 3-bbc_three</item>
+        <item>185-ITV 2-itv_2</item>
+        <item>1859-ITV 3-itv_3</item>
+        <item>1961-ITV 4-itv_4</item>
+        <item>2040-BBC Red Button-bbc_redbutton</item>
+    </array>
+    <array name="sky_channels">
+        <item>262-Sky Sports 1-sky_sports1</item>
+        <item>264-Sky Sports 2-sky_sports2</item>
+        <item>265-Sky Sports 3-sky_sports3</item>
+    </array>
+    <array name="espn_channels">
+        <item>2142-ESPN-espn</item>
+    </array>
+    <color name="highlight_colour">#FBFF3D</color>
+    <color name="normal_colour">#5b7791</color>
+</resources>

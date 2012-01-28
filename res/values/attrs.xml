@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<declare-styleable name="ListPreferenceMultiSelect">
+		<attr name="preferenceKey" format="string" />
+                <attr name="preferenceValKey" format="string" />
+                <attr name="defaults" format="integer" />
+	</declare-styleable>
+</resources>

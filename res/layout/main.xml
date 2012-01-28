@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:id="@+id/LinearLayout01"
+ android:layout_width="fill_parent"
+ android:layout_height="fill_parent"
+ android:background="@drawable/background"
+ xmlns:android="http://schemas.android.com/apk/res/android"
+ xmlns:app="http://schemas.android.com/apk/res/org.codefish.fixturefeed">
+    <ListView android:id="@+id/ListView01"
+     android:layout_width="fill_parent"
+     android:layout_height="fill_parent"
+     android:layout_alignParentTop="true"
+     android:dividerHeight="1px"
+     android:layout_above="@+id/ad"
+     android:cacheColorHint="#00000000"
+     android:background="@android:color/transparent"
+     android:divider="#ffffff">
+    </ListView>
+</RelativeLayout>

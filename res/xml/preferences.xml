@@ -1,0 +1,71 @@
+<PreferenceScreen
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res/org.codefish.fixturefeedpro">
+    <CheckBoxPreference
+    android:key="autoUpdate"
+    android:title="Auto Update"
+    android:defaultValue="true"
+    android:summary="Automatically check for new shows every few minutes"/>
+    <ListPreference
+    android:title="Category"
+    android:summary="Select a category to search"
+    android:key="categoryPreference"
+    android:defaultValue="Sport"
+    android:entries="@array/listChannels"
+    android:entryValues="@array/listChannels" />
+    <PreferenceCategory android:title="Channels">
+        <CheckBoxPreference
+        android:key="searchSkySports"
+        android:title="Sky Sports"
+        android:defaultValue="false"
+        android:summary="Include sky sports channels in search"/>
+         <CheckBoxPreference
+        android:key="searchEspn"
+        android:title="ESPN"
+        android:defaultValue="false"
+        android:summary="Include ESPN in search"/>
+    </PreferenceCategory>
+    <PreferenceCategory android:title="Search">
+        <org.codefish.fixturefeedpro.view.ListPreferenceMultiSelect
+        app:preferenceKey="keywords"
+        app:preferenceValKey="selectedkeywords"
+        android:dialogTitle="Add keyword"
+        android:key="keywordsMulti"
+        android:title="Keywords">
+        </org.codefish.fixturefeedpro.view.ListPreferenceMultiSelect>
+        <org.codefish.fixturefeedpro.view.AddKeywordPreference
+                app:preferenceKey="keywords"
+                app:preferenceValKey="selectedkeywords"
+                android:dialogTitle="Add keyword"
+                android:dialogMessage="Type a new keyword"
+                android:title="Add keyword"
+                android:summary="Add a new search word">
+        </org.codefish.fixturefeedpro.view.AddKeywordPreference>
+        <Preference
+        android:title="Default Keywords"
+        android:summary="Revert to default keywords"
+        android:key="clearKeywords" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="Exclude">
+         <org.codefish.fixturefeedpro.view.ListPreferenceMultiSelect
+        app:preferenceKey="excludewords"
+        app:preferenceValKey="selectedexcludewords"
+        android:dialogTitle="Add exclude word"
+        android:key="exlcudewordsMulti"
+        android:title="Exclude words">
+        </org.codefish.fixturefeedpro.view.ListPreferenceMultiSelect>
+        <org.codefish.fixturefeedpro.view.AddKeywordPreference
+                app:preferenceKey="excludewords"
+                app:preferenceValKey="selectedexcludewords"
+                app:defaults="2131099651"
+                android:dialogTitle="Add exclude word"
+                android:dialogMessage="Type a new exclude word"
+                android:title="Add exclude word"
+                android:summary="Add a new exclude word">
+        </org.codefish.fixturefeedpro.view.AddKeywordPreference>
+        <Preference
+        android:title="Default Exclude Word"
+        android:summary="Revert to default words to exclude"
+        android:key="clearExcludewords" />
+    </PreferenceCategory>
+</PreferenceScreen>
