@@ -1,11 +1,21 @@
 package org.codefish.fixturefeedpro;
 
-import org.codefish.fixturefeedpro.view.FeedbackView;
-import org.codefish.fixturefeedpro.view.PreferenceScreen;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import org.codefish.fixturefeedpro.tv.TVListing;
 import org.codefish.fixturefeedpro.tv.TVListingComparator;
 import org.codefish.fixturefeedpro.tv.TVListingHelper;
-import org.codefish.fixturefeedpro.tv.TVListing;
-import android.app.Activity;
+import org.codefish.fixturefeedpro.util.AndroidUtils;
+import org.codefish.fixturefeedpro.util.AppRater;
+import org.codefish.fixturefeedpro.view.FeedbackView;
+import org.codefish.fixturefeedpro.view.PreferenceScreen;
+
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
@@ -19,31 +29,22 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Timer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.codefish.fixturefeedpro.util.AndroidUtils;
-import org.codefish.fixturefeedpro.util.AppRater;
+
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.view.MenuItem.OnMenuItemClickListener;
 
 /**
  * Main fixture feed class
  * @author Matthew
  */
-public class FixtureFeed extends Activity {
+public class FixtureFeed extends FixtureFeedBaseActivity{
 
     private ListView listView;
     private ListingAdapter listAdapter;
@@ -55,10 +56,8 @@ public class FixtureFeed extends Activity {
     private List<String> excludeTerms;
     private int MAX_THREADS;
     private int MAX_DATA_AGE;
-    private int refreshInterval;
     private final String SPLIT_CHAR = "-";
     private String SAVE_FILE;
-    private Timer refreshTimer;
     private boolean updating=false;
     // Handler for callbacks to the UI thread
     final Handler mHandler = new Handler();
@@ -66,8 +65,6 @@ public class FixtureFeed extends Activity {
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-
-        requestWindowFeature(Window.FEATURE_RIGHT_ICON);
 
         Resources res = getResources();
         this.MAX_DATA_AGE = res.getInteger(R.integer.days_to_keep_data);//get the maxiumum time we keep the data in days
@@ -122,7 +119,6 @@ public class FixtureFeed extends Activity {
 
 
         this.MAX_THREADS = res.getInteger(R.integer.max_threads);//set the maximum number of threads for the updater
-        this.refreshInterval = res.getInteger(R.integer.refresh_interval_mins)*60000;//refresh interval in milliseconds        
         loadExcludeList(res);
 
         if (listings == null || listings.isEmpty()) {
@@ -133,61 +129,43 @@ public class FixtureFeed extends Activity {
 
         //ask the user to rate the app after 3 days (or 7 launches) of use
         AppRater.app_launched(this);
-
-        if(KeywordPrefHelper.getAutoUpdate(this)){
-            initTimer();//start the background updater timer
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if(!KeywordPrefHelper.getAutoUpdate(this)){
-            if(refreshTimer != null){
-                refreshTimer.cancel();//cancel the timer if we've turned auto updating off
-                refreshTimer = null;
-                hideReloadIcon();
-            }
-        }else{
-            if(refreshTimer == null){
-                initTimer();//start the timer if it isn't already started
-            }
-        }
     }
 
 
-    /**
-     * create the options menu
-     * @param menu
-     * @return
-     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu, menu);
-        return true;
-    }
-
-    /**
-     * when an options button is pressed
-     * @param item
-     * @return
-     */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.refreshButton:
-                refreshShows(false);
-                break;
-            case R.id.settingButton:
-                startActivity(new Intent(this, PreferenceScreen.class));
-                break;
-            case R.id.feedbackButton:
-                startActivity(new Intent(this, FeedbackView.class));//start the feeback view
-                //create form
-                break;
-        }
-        return true;
+    	menu.add("Refresh")
+        .setIcon(R.drawable.refresh)
+        .setOnMenuItemClickListener(new OnMenuItemClickListener() {
+			@Override
+			public boolean onMenuItemClick(com.actionbarsherlock.view.MenuItem item) {
+				refreshShows(false);
+				return false;
+			}
+		})
+		.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+    	
+    	menu.add("Feedback")
+    	.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+			@Override
+			public boolean onMenuItemClick(MenuItem item) {
+				startActivity(new Intent(FixtureFeed.this, FeedbackView.class));
+				return false;
+			}
+		})
+		.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+    	
+    	menu.add("Settings")
+    	.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+			@Override
+			public boolean onMenuItemClick(MenuItem item) {
+				startActivity(new Intent(FixtureFeed.this, PreferenceScreen.class));
+				return false;
+			}
+		})
+		.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+    	
+    	return true;
     }
 
     /**
@@ -416,28 +394,6 @@ public class FixtureFeed extends Activity {
         return returnList;
     }
 
-    /**
-     * schedule background refreshing of the shows
-     */
-    private void initTimer(){
-        refreshTimer = new Timer();
-        //schedule refresh every so many mins, starting now
-        refreshTimer.scheduleAtFixedRate(new UpdaterTimerTask(this, mHandler),10000,refreshInterval);
-    }
-
-    /**
-     * refresh the shows in the background
-     */
-    public void backgroundRefresh(){
-        if(!isUpdating() && AndroidUtils.haveInternet(this)){
-            showReloadIcon();
-            setUpdating(true);
-            String[] myStringArray = new String[]{};
-            List<String> channels = getChannels();
-            new BackgroundUpdater(this, KeywordPrefHelper.getCategory(this), listings).execute(channels.toArray(myStringArray));
-        }
-    }
-
 
     /**
      * Add this show to the users calendar
@@ -579,13 +535,6 @@ public class FixtureFeed extends Activity {
             }
         }
         return managedCursor;
-    }
-
-    /**
-     * show the reload icon in the title bar
-     */
-    public void showReloadIcon() {
-        setFeatureDrawableResource(Window.FEATURE_RIGHT_ICON, R.drawable.refresh_icon);//set the refresh icon in the title bar
     }
 
     /**

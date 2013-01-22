@@ -1,11 +1,6 @@
 <PreferenceScreen
 xmlns:android="http://schemas.android.com/apk/res/android"
 xmlns:app="http://schemas.android.com/apk/res/org.codefish.fixturefeedpro">
-    <CheckBoxPreference
-    android:key="autoUpdate"
-    android:title="Auto Update"
-    android:defaultValue="true"
-    android:summary="Automatically check for new shows every few minutes"/>
     <ListPreference
     android:title="Category"
     android:summary="Select a category to search"

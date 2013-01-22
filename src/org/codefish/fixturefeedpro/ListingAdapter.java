@@ -47,13 +47,22 @@ public class ListingAdapter extends ArrayAdapter<TVListing> {
                 LayoutInflater vi = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 v = vi.inflate(R.layout.row, null);
             }
+            
+            ViewHolder holder = (ViewHolder) v.getTag();
+            if(holder==null){
+            	holder = new ViewHolder();
+            	holder.icon = (ImageView) v.findViewById(R.id.icon);
+            	holder.topText = (TextView) v.findViewById(R.id.toptext);
+            	holder.bottomText = (TextView) v.findViewById(R.id.bottomtext);
+            	holder.calendar = (ImageView) v.findViewById(R.id.calIcon);
+            }
 
             /**
              * NOTE: we have to set every piece of data about the rows each time the view is reloaded because android has no concept of the previous state
              */
 
             //set the icon
-            ImageView iv = (ImageView) v.findViewById(R.id.icon);
+            ImageView iv = holder.icon;
             if (iv != null) {
                 if (!"".equals(o.getChannelLogo())) {
                     Uri path = Uri.parse(BASE_URI + o.getChannelLogo());
@@ -64,24 +73,24 @@ public class ListingAdapter extends ArrayAdapter<TVListing> {
             }
             
             //set the text
-            TextView tt = (TextView) v.findViewById(R.id.toptext);
+            TextView tt = holder.topText;
             if (tt != null) {
                 tt.setText(o.getTitle());
 
-                TextView tdet = (TextView) v.findViewById(R.id.bottomtext);
+                TextView tdet = holder.bottomText;
                 if (tdet != null) {
                     tdet.setText(START_DATE_FORMAT.format(o.getStart()) + " - " + END_TIME_FORMAT.format(o.getEnd()));
                 }
             }
 
             //show the calendar icon if this show has been added to the calendar
-            ImageView calIcon = (ImageView) v.findViewById(R.id.calIcon);
+            ImageView calIcon = holder.calendar;
             if (calIcon != null) {
                 calIcon.setVisibility(o.isAddedToCal()?ImageView.VISIBLE:ImageView.INVISIBLE);
             }
 
             if (DateUtil.isToday(o.getStart())) {//if the show is on today, then use the view with the highlighted colour
-                v.setBackgroundColor(R.color.highlight_colour);
+                v.setBackgroundColor(getContext().getResources().getColor(R.color.highlight_colour));
             } else {
                 v.setBackgroundColor(color.transparent);
             }
@@ -109,5 +118,12 @@ public class ListingAdapter extends ArrayAdapter<TVListing> {
     public void add(TVListing object) {
         super.add(object);
         items.add(object);
+    }
+    
+    static class ViewHolder {
+    	  TextView topText;
+    	  TextView bottomText;
+    	  ImageView icon;
+    	  ImageView calendar;
     }
 }
